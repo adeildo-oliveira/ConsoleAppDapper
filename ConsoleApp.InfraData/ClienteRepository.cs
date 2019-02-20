@@ -35,8 +35,8 @@ namespace ConsoleApp.InfraData
                         if (clientes.Any(x => x.Id == cliente.Id))
                         {
                             var resultado = clientes.FirstOrDefault(x => x.Id == cliente.Id);
-                            resultado.AdicionaEndereco(endereco);
-                            resultado.AdicionaTelefone(telefone);
+                            resultado.AdicionarEndereco(endereco);
+                            resultado.AdicionarTelefone(telefone);
                         }
 
                         return cliente;

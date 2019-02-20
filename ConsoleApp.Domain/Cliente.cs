@@ -21,13 +21,13 @@ namespace ConsoleApp.Domain
         public ICollection<Endereco> Enderecos { get; private set; }
         public ICollection<Telefone> Telefones { get; private set; }
 
-        public virtual void AdicionaEndereco(Endereco endereco)
+        public virtual void AdicionarEndereco(Endereco endereco)
         {
             if(!Enderecos.Any(x => x.Id == endereco.Id))
                 Enderecos.Add(endereco);
         }
 
-        public virtual void AdicionaTelefone(Telefone telefone)
+        public virtual void AdicionarTelefone(Telefone telefone)
         {
             if(!Telefones.Any(x => x.Id == telefone.Id))
                 Telefones.Add(telefone);

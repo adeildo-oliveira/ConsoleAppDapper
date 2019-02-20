@@ -20,6 +20,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ConsoleApp.InfraData\ConsoleApp.InfraData.csproj" />
+    <ProjectReference Include="..\Tests.Shared\Tests.Shared.csproj" />
   </ItemGroup>
 
   <ItemGroup>

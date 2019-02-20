@@ -3,7 +3,7 @@ using System;
 
 namespace Tests.Shared
 {
-    public class EnderecoBuilder : InMemoryBuilder<Endereco>
+    public class EnderecoBuilder : DatabaseBuilder<Endereco>
     {
         private Guid _id;
         private string _logradouro;

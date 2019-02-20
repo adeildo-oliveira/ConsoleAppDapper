@@ -3,8 +3,8 @@ using ConsoleApp.InfraData;
 using FluentAssertions;
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
+using Tests.Shared;
 using Xunit;
 
 namespace Tests.Integration
@@ -21,8 +21,22 @@ namespace Tests.Integration
         [Fact]
         public async Task DeveBuscarTodosCliente()
         {
+            var id = Guid.NewGuid();
+            var clienteBuilder = new ClienteBuilder()
+                .ComId(id)
+                .ComNome("Petit")
+                .ComSobreNome("Oliveira")
+                .Criar($"insert into Cliente values('{id}', 'Petit', 'Oliveira')");
+
+            var enderecoBuilder = new EnderecoBuilder()
+                .ComLogradouro("Av. Um")
+                .ComBairro("São José")
+                .ComCidade("São Paulo")
+                .ComEstado("SP")
+                .Criar($"insert into Endereco values('{Guid.NewGuid()}', '{id}', 'Av. Um', 'São José', 'São Paulo', 'SP')");
+
             var resultado = (await _clienteRepository.ObtemClientes()) as List<Cliente>;
-            resultado.Should().HaveCount(2);
+            resultado.Should().HaveCount(1);
             resultado[0].Enderecos.Should().HaveCount(1);
             resultado[0].Telefones.Should().HaveCount(3);
 

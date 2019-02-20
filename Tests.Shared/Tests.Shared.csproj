@@ -5,7 +5,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Dapper" Version="1.50.7" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\ConsoleApp.Domain\ConsoleApp.Domain.csproj" />
+    <ProjectReference Include="..\ConsoleApp.InfraData\ConsoleApp.InfraData.csproj" />
   </ItemGroup>
 
 </Project>

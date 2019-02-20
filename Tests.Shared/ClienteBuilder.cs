@@ -3,8 +3,9 @@ using System;
 
 namespace Tests.Shared
 {
-    public class ClienteBuilder : InMemoryBuilder<Cliente>
+    public class ClienteBuilder : DatabaseBuilder<Cliente>
     {
+        private Endereco _endereco;
         private Guid _id;
         private string _nome;
         private string _sobreNome;
@@ -27,6 +28,23 @@ namespace Tests.Shared
             return this;
         }
 
-        public override Cliente Instanciar() => new Cliente(_id, _nome, _sobreNome);
+        public ClienteBuilder ComEndereco(Endereco endereco)
+        {
+            _endereco = endereco;
+            return this;
+        }
+
+        protected override void CriarDependencias(string query)
+        {
+            if(_endereco == null)
+                _endereco = new EnderecoBuilder().Criar(query);
+        }
+
+        public override Cliente Instanciar()
+        {
+            var cliente = new Cliente(_id, _nome, _sobreNome);
+            cliente.AdicionarEndereco(_endereco);
+            return cliente;
+        }
     }
 }

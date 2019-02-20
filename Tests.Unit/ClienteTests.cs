@@ -46,8 +46,8 @@ namespace Tests.Unit
                 .ComCidade("São Paulo")
                 .ComEstado("SP").Instanciar();
 
-            cliente.AdicionaEndereco(endereco);
-            cliente.AdicionaEndereco(endereco);
+            cliente.AdicionarEndereco(endereco);
+            cliente.AdicionarEndereco(endereco);
 
             cliente.Nome.Should().Be("João");
             cliente.SobreNome.Should().Be("da Silva");
@@ -74,8 +74,8 @@ namespace Tests.Unit
                 .ComCidade("São Paulo")
                 .ComEstado("SP").Instanciar();
 
-            cliente.AdicionaEndereco(endereco);
-            cliente.AdicionaEndereco(endereco2);
+            cliente.AdicionarEndereco(endereco);
+            cliente.AdicionarEndereco(endereco2);
 
             cliente.Enderecos.Count().Should().Be(2);
             cliente.Enderecos.FirstOrDefault().Should().BeEquivalentTo(endereco);
@@ -88,7 +88,7 @@ namespace Tests.Unit
             var cliente = new ClienteBuilder().ComNome("João").ComSobreNome("da Silva").Instanciar();
             var telefone = new TelefoneBuilder().ComNumero("(11) 25896-3698").Instanciar();
 
-            cliente.AdicionaTelefone(telefone);
+            cliente.AdicionarTelefone(telefone);
 
             cliente.Nome.Should().Be("João");
             cliente.SobreNome.Should().Be("da Silva");
@@ -103,8 +103,8 @@ namespace Tests.Unit
             var cliente = new ClienteBuilder().ComNome("João").ComSobreNome("da Silva").Instanciar();
             var telefone = new TelefoneBuilder().ComId(id).ComNumero("(11) 25896-3698").Instanciar();
 
-            cliente.AdicionaTelefone(telefone);
-            cliente.AdicionaTelefone(telefone);
+            cliente.AdicionarTelefone(telefone);
+            cliente.AdicionarTelefone(telefone);
 
             cliente.Nome.Should().Be("João");
             cliente.SobreNome.Should().Be("da Silva");
@@ -119,8 +119,8 @@ namespace Tests.Unit
             var telefone = new TelefoneBuilder().ComId(Guid.NewGuid()).ComNumero("(11) 25896-3698").Instanciar();
             var telefone2 = new TelefoneBuilder().ComId(Guid.NewGuid()).ComNumero("(11) 25896-3698").Instanciar();
 
-            cliente.AdicionaTelefone(telefone);
-            cliente.AdicionaTelefone(telefone2);
+            cliente.AdicionarTelefone(telefone);
+            cliente.AdicionarTelefone(telefone2);
 
             cliente.Nome.Should().Be("João");
             cliente.SobreNome.Should().Be("da Silva");

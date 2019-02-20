@@ -7,7 +7,7 @@ namespace ConsoleApp.InfraData.Context
 {
     public class GetConnectionDapper
     {
-        protected IDbConnection Connection => new SqlConnection(
+        public static IDbConnection Connection => new SqlConnection(
             new ConfigurationBuilder()
             .SetBasePath(Directory.GetCurrentDirectory())
             .AddJsonFile("appsettings.json")
