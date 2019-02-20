@@ -34,12 +34,6 @@ namespace Tests.Shared
             return this;
         }
 
-        protected override void CriarDependencias(string query)
-        {
-            if(_endereco == null)
-                _endereco = new EnderecoBuilder().Criar(query);
-        }
-
         public override Cliente Instanciar()
         {
             var cliente = new Cliente(_id, _nome, _sobreNome);
