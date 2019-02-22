@@ -1,7 +1,6 @@
 ﻿using ConsoleApp.Domain;
 using ConsoleApp.InfraData.Context;
 using Dapper;
-using Slapper;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +10,22 @@ namespace ConsoleApp.InfraData
 {
     public class ClienteRepository : GetConnectionDapper, IClienteRepository
     {
+        public virtual async Task InserirCliente(Cliente cliente)
+        {
+            using (var conn = Connection)
+            {
+                var sql = "INSERT INTO Cliente VALUES (@id, @nome, @sobreNome)";
+
+                conn.Open();
+                await conn.QueryAsync(sql, new
+                {
+                    id = cliente.Id,
+                    nome = cliente.Nome,
+                    sobreNome = cliente.SobreNome
+                });
+            }
+        }
+
         public virtual async Task<IEnumerable<Cliente>> ObtemClientes()
         {
             using (var conn = Connection)
@@ -45,10 +60,13 @@ namespace ConsoleApp.InfraData
                 return clientes;
             }
         }
+
+        //public DateTime? NullData() => data == DateTime.MinValue ? (DateTime?)null : data;
     }
 
     public interface IClienteRepository
     {
         Task<IEnumerable<Cliente>> ObtemClientes();
+        Task InserirCliente(Cliente cliente);
     }
 }

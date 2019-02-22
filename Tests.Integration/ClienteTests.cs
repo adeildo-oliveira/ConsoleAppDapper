@@ -1,21 +1,26 @@
 ﻿using ConsoleApp.Domain;
 using ConsoleApp.InfraData;
 using FluentAssertions;
+using Microsoft.Extensions.DependencyInjection;
+using Moq.AutoMock;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Tests.Integration.Tools;
 using Tests.Shared;
 using Xunit;
 
 namespace Tests.Integration
 {
-    public class ClienteTests
+    public class ClienteTests : IClassFixture<IntegrationTestFixture>
     {
-        private readonly ClienteRepository _clienteRepository;
+        private ServiceProvider _serviceProvide;
+        private readonly IClienteRepository _clienteRepository;
 
-        public ClienteTests()
+        public ClienteTests(IntegrationTestFixture fixture)
         {
-            _clienteRepository = new ClienteRepository();
+            _serviceProvide = fixture.ServiceProvider;
+            _serviceProvide.GetServices<IClienteRepository>();
         }
 
         [Fact]
@@ -42,6 +47,18 @@ namespace Tests.Integration
 
             resultado[1].Enderecos.Should().HaveCount(1);
             resultado[1].Telefones.Should().HaveCount(1);
+        }
+
+        [Fact]
+        public async Task DeveInserirCliente()
+        {
+            var id = Guid.NewGuid();
+            var clienteBuilder = new ClienteBuilder()
+                .ComId(id)
+                .ComSobreNome("")
+                .ComNome("Petit").Instanciar();
+
+            await new AutoMocker().CreateInstance<ClienteRepository>().InserirCliente(clienteBuilder);
         }
     }
 }

@@ -1,12 +1,18 @@
-﻿using System;
+﻿using ConsoleApp.InfraData;
+using Microsoft.Extensions.DependencyInjection;
+using System;
 
 namespace ConsoleAppDapper
 {
-    class Program
+    public class Program
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            var serviceProvider = new ServiceCollection()
+                .AddScoped<IClienteRepository, ClienteRepository>()
+                .BuildServiceProvider();
+
+            Console.ReadKey();
         }
     }
 }
