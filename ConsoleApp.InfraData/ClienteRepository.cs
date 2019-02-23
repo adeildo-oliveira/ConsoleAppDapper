@@ -1,8 +1,10 @@
 ﻿using ConsoleApp.Domain;
 using ConsoleApp.InfraData.Context;
+using ConsoleApp.InfraData.ScriptSQL;
 using Dapper;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -14,34 +16,38 @@ namespace ConsoleApp.InfraData
         {
             using (var conn = Connection)
             {
-                var sql = "INSERT INTO Cliente VALUES (@id, @nome, @sobreNome)";
-
                 conn.Open();
-                await conn.QueryAsync(sql, new
+                await conn.QueryAsync(ClienteScripts.InserirCliente, new
                 {
                     id = cliente.Id,
                     nome = cliente.Nome,
                     sobreNome = cliente.SobreNome
-                });
+                }, commandType: CommandType.Text);
             }
         }
 
-        public virtual async Task<IEnumerable<Cliente>> ObtemClientes()
+        public virtual async Task<Cliente> ObterCliente(Guid id)
         {
             using (var conn = Connection)
             {
-                var sql = @"SELECT A.Id, A.Nome, A.SobreNome, 
-                            B.Id, Logradouro, B.Bairro, B.Cidade, B.Estado,
-                            C.Id, C.Numero
-                            FROM Cliente A
-                            INNER JOIN Endereco B ON (A.Id = B.ClienteId)
-                            INNER JOIN Telefone C ON (A.Id = C.ClienteId)";
+                conn.Open();
+
+                return await conn.QueryFirstOrDefaultAsync<Cliente>(ClienteScripts.ObterCliente, new
+                {
+                    clienteId = id
+                }, commandType: CommandType.Text);
+            }
+        }
+
+        public virtual async Task<IEnumerable<Cliente>> ObterClientes()
+        {
+            using (var conn = Connection)
+            {
+                var clientes = new List<Cliente>();
 
                 conn.Open();
 
-                var clientes = new List<Cliente>();
-
-                await conn.QueryAsync<Cliente, Endereco, Telefone, Cliente>(sql,
+                await conn.QueryAsync<Cliente, Endereco, Telefone, Cliente>(ClienteScripts.ObterClientes,
                     (cliente, endereco, telefone) =>
                     {
                         if(!clientes.Any(x => x.Id == cliente.Id))
@@ -55,18 +61,19 @@ namespace ConsoleApp.InfraData
                         }
 
                         return cliente;
-                    }, splitOn: "Id");
+                    }, 
+                    splitOn: "Id", 
+                    commandType: CommandType.Text);
 
                 return clientes;
             }
         }
-
-        //public DateTime? NullData() => data == DateTime.MinValue ? (DateTime?)null : data;
     }
 
     public interface IClienteRepository
     {
-        Task<IEnumerable<Cliente>> ObtemClientes();
+        Task<Cliente> ObterCliente(Guid id);
+        Task<IEnumerable<Cliente>> ObterClientes();
         Task InserirCliente(Cliente cliente);
     }
 }

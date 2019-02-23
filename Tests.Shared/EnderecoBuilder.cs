@@ -10,6 +10,7 @@ namespace Tests.Shared
         private string _bairro;
         private string _cidade;
         private string _estado;
+        private Cliente _cliente;
 
         public EnderecoBuilder ComId(Guid id)
         {
@@ -41,6 +42,15 @@ namespace Tests.Shared
             return this;
         }
 
+        public EnderecoBuilder ComCliente(Cliente cliente)
+        {
+            _cliente = cliente;
+            return this;
+        }
+
         public override Endereco Instanciar() => new Endereco(_id, _logradouro, _bairro, _cidade, _estado);
+
+        public override Endereco Criar() => 
+            Criar($"insert into Endereco values ('{_id}', '{_cliente.Id}', '{_logradouro}', '{_bairro}', '{_cidade}', '{_estado}')");
     }
 }

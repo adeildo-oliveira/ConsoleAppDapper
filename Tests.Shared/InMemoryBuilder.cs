@@ -3,5 +3,6 @@
     public abstract class InMemoryBuilder<T> where T : class
     {
         public abstract T Instanciar();
+        public abstract T Criar();
     }
 }

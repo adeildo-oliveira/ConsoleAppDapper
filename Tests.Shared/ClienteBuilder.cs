@@ -6,6 +6,7 @@ namespace Tests.Shared
     public class ClienteBuilder : DatabaseBuilder<Cliente>
     {
         private Endereco _endereco;
+        private Telefone _telefone;
         private Guid _id;
         private string _nome;
         private string _sobreNome;
@@ -28,17 +29,8 @@ namespace Tests.Shared
             return this;
         }
 
-        public ClienteBuilder ComEndereco(Endereco endereco)
-        {
-            _endereco = endereco;
-            return this;
-        }
+        public override Cliente Instanciar() => new Cliente(_id, _nome, _sobreNome);
 
-        public override Cliente Instanciar()
-        {
-            var cliente = new Cliente(_id, _nome, _sobreNome);
-            cliente.AdicionarEndereco(_endereco);
-            return cliente;
-        }
+        public override Cliente Criar() => Criar($"insert into Cliente values ('{_id}', '{_nome}', '{_sobreNome}')");
     }
 }

@@ -5,17 +5,22 @@ namespace Tests.Shared
 {
     public abstract class DatabaseBuilder<T> : InMemoryBuilder<T> where T : class
     {
-        protected virtual void CriarDependencias(string query) { }
+        protected virtual void CriarDependencias(string query) => ExecutarScript(query);
 
-        public T Criar(string query)
+        protected virtual T Criar(string query)
+        {
+            ExecutarScript(query);
+
+            return Instanciar();
+        }
+
+        private static void ExecutarScript(string query)
         {
             using (var conn = GetConnectionDapper.Connection)
             {
                 conn.Open();
                 conn.Query<T>(query);
             }
-
-            return Instanciar();
         }
     }
 }
