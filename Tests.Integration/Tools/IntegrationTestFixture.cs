@@ -1,4 +1,4 @@
-﻿using Castle.Core.Configuration;
+﻿using ConsoleApp.Domain.Interfaces.Repository;
 using ConsoleApp.InfraData;
 using ConsoleApp.InfraData.Context;
 using Dapper;
@@ -7,10 +7,8 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Data;
 using System.Data.SqlClient;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Text.RegularExpressions;
 
 namespace Tests.Integration.Tools
 {

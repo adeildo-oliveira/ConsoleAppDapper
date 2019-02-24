@@ -1,5 +1,5 @@
 ﻿using ConsoleApp.Domain;
-using ConsoleApp.InfraData;
+using ConsoleApp.Domain.Interfaces.Repository;
 using FluentAssertions;
 using System;
 using System.Collections.Generic;

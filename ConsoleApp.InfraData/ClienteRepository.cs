@@ -1,4 +1,5 @@
 ﻿using ConsoleApp.Domain;
+using ConsoleApp.Domain.Interfaces.Repository;
 using ConsoleApp.InfraData.Context;
 using ConsoleApp.InfraData.ScriptSQL;
 using Dapper;
@@ -68,12 +69,11 @@ namespace ConsoleApp.InfraData
                 return clientes;
             }
         }
-    }
 
-    public interface IClienteRepository
-    {
-        Task<Cliente> ObterCliente(Guid id);
-        Task<IEnumerable<Cliente>> ObterClientes();
-        Task InserirCliente(Cliente cliente);
+        public void Dispose()
+        {
+            Connection.Dispose();
+            GC.SuppressFinalize(this);
+        }
     }
 }
