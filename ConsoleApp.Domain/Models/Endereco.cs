@@ -1,7 +1,7 @@
 ﻿using ConsoleApp.Domain.ModelEntity;
 using System;
 
-namespace ConsoleApp.Domain
+namespace ConsoleApp.Domain.Models
 {
     public class Endereco : Entity
     {

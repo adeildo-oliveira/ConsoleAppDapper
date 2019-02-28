@@ -1,4 +1,4 @@
-﻿using ConsoleApp.Domain;
+﻿using ConsoleApp.Domain.Models;
 using System;
 
 namespace Tests.Shared

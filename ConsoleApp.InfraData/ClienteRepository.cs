@@ -1,5 +1,5 @@
-﻿using ConsoleApp.Domain;
-using ConsoleApp.Domain.Interfaces.Repository;
+﻿using ConsoleApp.Domain.Interfaces.Repository;
+using ConsoleApp.Domain.Models;
 using ConsoleApp.InfraData.Context;
 using ConsoleApp.InfraData.ScriptSQL;
 using Dapper;

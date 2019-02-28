@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ConsoleApp.Domain.Models;
+using System;
 using System.Threading.Tasks;
 
 namespace ConsoleApp.Domain.Interfaces.Services

@@ -1,5 +1,4 @@
-﻿using ConsoleApp.Domain;
-using ConsoleApp.Domain.Interfaces.Repository;
+﻿using ConsoleApp.Domain.Interfaces.Repository;
 using ConsoleApp.Domain.Interfaces.Services;
 using ConsoleApp.Domain.Models;
 using ConsoleApp.Domain.Services;

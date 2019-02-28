@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace ConsoleApp.Domain
+namespace ConsoleApp.Domain.Models
 {
     public class Cliente : Entity
     {
