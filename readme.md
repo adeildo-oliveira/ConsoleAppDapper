@@ -68,5 +68,5 @@ docker pull microsoft/mssql-server-linux:2017-latest
 docker run --name SQLServer2017 -e "ACCEPT_EULA=Y" -e "MSSQL_SA_PASSWORD={SENHA}" -e "MSSQL_PID=Developer" --cap-add SYS_PTRACE -p {PORTA EXTERNA}:{PORTA INTERNA} -d microsoft/mssql-server-linux:2017-latest
 ```
 
-* Nas configurações da connectionstirng, basta substituir as váriaveis **{PORTA}**, **{USUARIO}** e **{SENHA}**.
-* Dexei também a connection dos testes de integração, ela segue o mesmo exmplo da connection da camada InfraData
+* Nas configurações da connectionstirng, basta substituir as variáveis **{PORTA}**, **{USUARIO}** e **{SENHA}**.
+* Dexei também a connection dos testes de integração, ela segue o mesmo exemplo da connection da camada InfraData
