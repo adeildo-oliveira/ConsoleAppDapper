@@ -97,12 +97,13 @@ namespace Tests.Integration
             clienteBuilder.AdicionarTelefone(telefoneBuilder);
 
             var resultado = (await _clienteRepository.ObterClientes()) as List<Cliente>;
+
             resultado.Should().HaveCount(1);
-            resultado.Should().BeEquivalentTo(clienteBuilder);
-            resultado[0].Enderecos.Should().BeEquivalentTo(enderecoBuilder);
-            resultado[0].Telefones.Should().BeEquivalentTo(telefoneBuilder);
             resultado[0].Enderecos.Should().HaveCount(1);
             resultado[0].Telefones.Should().HaveCount(1);
+            resultado[0].Should().BeEquivalentTo(clienteBuilder);
+            resultado[0].Enderecos.FirstOrDefault().Should().BeEquivalentTo(enderecoBuilder);
+            resultado[0].Telefones.FirstOrDefault().Should().BeEquivalentTo(telefoneBuilder);
         }
 
         [Fact]
@@ -155,15 +156,15 @@ namespace Tests.Integration
             var resultado = (await _clienteRepository.ObterClientes()).ToList();
 
             resultado.Should().HaveCount(1);
-            resultado.Should().BeEquivalentTo(clienteBuilder);
-            resultado[0].Enderecos.Should().BeEquivalentTo(clienteBuilder.Enderecos);
-            resultado[0].Telefones.Should().BeEquivalentTo(clienteBuilder.Telefones);
+            resultado[0].Enderecos.Should().HaveCount(3);
+            resultado[0].Telefones.Should().HaveCount(1);
+            resultado.FirstOrDefault().Should().BeEquivalentTo(clienteBuilder);
+            resultado.FirstOrDefault().Enderecos.Should().BeEquivalentTo(clienteBuilder.Enderecos);
+            resultado.FirstOrDefault().Telefones.Should().BeEquivalentTo(clienteBuilder.Telefones);
             resultado[0].Enderecos.FirstOrDefault(x => x.Id == enderecoBuilder.Id).Should().BeEquivalentTo(enderecoBuilder);
             resultado[0].Enderecos.FirstOrDefault(x => x.Id == enderecoBuilder2.Id).Should().BeEquivalentTo(enderecoBuilder2);
             resultado[0].Enderecos.FirstOrDefault(x => x.Id == enderecoBuilder3.Id).Should().BeEquivalentTo(enderecoBuilder3);
-            resultado[0].Telefones.Should().BeEquivalentTo(telefoneBuilder);
-            resultado[0].Enderecos.Should().HaveCount(3);
-            resultado[0].Telefones.Should().HaveCount(1);
+            resultado[0].Telefones.FirstOrDefault().Should().BeEquivalentTo(telefoneBuilder);
         }
 
         [Fact]
@@ -210,15 +211,15 @@ namespace Tests.Integration
             var resultado = (await _clienteRepository.ObterClientes()).ToList();
 
             resultado.Should().HaveCount(1);
-            resultado.Should().BeEquivalentTo(clienteBuilder);
+            resultado[0].Enderecos.Should().HaveCount(1);
+            resultado[0].Telefones.Should().HaveCount(3);
+            resultado.FirstOrDefault().Should().BeEquivalentTo(clienteBuilder);
             resultado[0].Enderecos.Should().BeEquivalentTo(clienteBuilder.Enderecos);
             resultado[0].Telefones.Should().BeEquivalentTo(clienteBuilder.Telefones);
             resultado[0].Enderecos.FirstOrDefault(x => x.Id == enderecoBuilder.Id).Should().BeEquivalentTo(enderecoBuilder);
             resultado[0].Telefones.FirstOrDefault(x => x.Id == telefoneBuilder.Id).Should().BeEquivalentTo(telefoneBuilder);
             resultado[0].Telefones.FirstOrDefault(x => x.Id == telefoneBuilder2.Id).Should().BeEquivalentTo(telefoneBuilder2);
             resultado[0].Telefones.FirstOrDefault(x => x.Id == telefoneBuilder3.Id).Should().BeEquivalentTo(telefoneBuilder3);
-            resultado[0].Enderecos.Should().HaveCount(1);
-            resultado[0].Telefones.Should().HaveCount(3);
         }
 
         [Fact]
@@ -285,7 +286,9 @@ namespace Tests.Integration
             var resultado = (await _clienteRepository.ObterClientes()).ToList();
 
             resultado.Should().HaveCount(1);
-            resultado.Should().BeEquivalentTo(clienteBuilder);
+            resultado[0].Enderecos.Should().HaveCount(3);
+            resultado[0].Telefones.Should().HaveCount(3);
+            resultado.FirstOrDefault().Should().BeEquivalentTo(clienteBuilder);
             resultado[0].Enderecos.Should().BeEquivalentTo(clienteBuilder.Enderecos);
             resultado[0].Telefones.Should().BeEquivalentTo(clienteBuilder.Telefones);
             resultado[0].Enderecos.FirstOrDefault(x => x.Id == enderecoBuilder.Id).Should().BeEquivalentTo(enderecoBuilder);
@@ -294,8 +297,6 @@ namespace Tests.Integration
             resultado[0].Telefones.FirstOrDefault(x => x.Id == telefoneBuilder.Id).Should().BeEquivalentTo(telefoneBuilder);
             resultado[0].Telefones.FirstOrDefault(x => x.Id == telefoneBuilder2.Id).Should().BeEquivalentTo(telefoneBuilder2);
             resultado[0].Telefones.FirstOrDefault(x => x.Id == telefoneBuilder3.Id).Should().BeEquivalentTo(telefoneBuilder3);
-            resultado[0].Enderecos.Should().HaveCount(3);
-            resultado[0].Telefones.Should().HaveCount(3);
         }
 
         [Fact]

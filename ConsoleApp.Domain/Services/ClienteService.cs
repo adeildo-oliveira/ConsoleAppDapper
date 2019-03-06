@@ -18,10 +18,13 @@ namespace ConsoleApp.Domain.Services
 
         public async Task InserirCliente(Cliente cliente)
         {
-            if (cliente != null)
+            if (cliente == null)
+                _notificationHandlerService.AddNotification(new NotificationHandler("Cliente", "Cliente inválido"));
+
+            if (!_notificationHandlerService.HasNotifications() && cliente?.EValido() == true)
                 await _clienteRepository.InserirCliente(cliente);
             else
-                _notificationHandlerService.AddDomainNotification(new NotificationHandler("Cliente", "Cliente inválido"));
+                _notificationHandlerService.AddValidationResult(cliente?.ValidationResult);
         }
 
         public void Dispose()

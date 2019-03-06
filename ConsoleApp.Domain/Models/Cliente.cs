@@ -1,11 +1,13 @@
 ﻿using ConsoleApp.Domain.ModelEntity;
+using FluentValidation;
+using FluentValidation.Results;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace ConsoleApp.Domain.Models
 {
-    public class Cliente : Entity
+    public class Cliente : Entity<Cliente>
     {
         public Cliente(Guid id, string nome, string sobreNome)
         {
@@ -31,6 +33,20 @@ namespace ConsoleApp.Domain.Models
         {
             if(!Telefones.Any(x => x.Id == telefone.Id))
                 Telefones.Add(telefone);
+        }
+
+        public override bool EValido()
+        {
+            RuleFor(c => c.Id)
+                .NotEqual(Guid.Empty).WithMessage("Id cliente inválido");
+
+            RuleFor(c => c.Nome)
+                .NotEmpty().When(m => string.IsNullOrWhiteSpace(m.Nome)).WithMessage("Nome inválido");
+            RuleFor(c => c.SobreNome)
+                .NotEmpty().When(m => string.IsNullOrWhiteSpace(m.SobreNome)).WithMessage("Sobre nome inválido");
+
+            ValidationResult = Validate(this);
+            return ValidationResult.IsValid;
         }
 
         public override bool Equals(object obj)

@@ -1,5 +1,7 @@
 ﻿using ConsoleApp.Domain.Services;
 using FluentAssertions;
+using FluentValidation.Results;
+using Moq;
 using System.Linq;
 using Tests.Shared;
 using Xunit;
@@ -10,10 +12,7 @@ namespace Tests.Unit
     {
         private readonly NotificationHandlerService _notificationHandlerService;
 
-        public NotificationHandlerServiceTests()
-        {
-            _notificationHandlerService = new NotificationHandlerService();
-        }
+        public NotificationHandlerServiceTests() => _notificationHandlerService = new NotificationHandlerService();
 
         [Fact]
         public void DeveAdicionarUmaNotivicationCorretamente()
@@ -22,11 +21,30 @@ namespace Tests.Unit
                 .ComValue("Cliente Inválido")
                 .Instanciar();
 
-            _notificationHandlerService.AddDomainNotification(notificationBuilder);
+            _notificationHandlerService.AddNotification(notificationBuilder);
 
             _notificationHandlerService.GetNotifications().Should().NotBeNull();
             _notificationHandlerService.GetNotifications().Should().HaveCount(1);
             _notificationHandlerService.GetNotifications().Should().BeEquivalentTo(notificationBuilder);
+            _notificationHandlerService.HasNotifications().Should().BeTrue();
+        }
+
+        [Fact]
+        public void DeveAdicionarUmaValidationResult()
+        {
+            var notificationBuilder = new ValidationResultBuilder()
+                .ComPropriedade("Id")
+                .ComMensagem("Id cliente inválido")
+                .Instanciar();
+
+            _notificationHandlerService.AddValidationResult(notificationBuilder);
+
+            var resultado = _notificationHandlerService.GetNotifications().FirstOrDefault();
+            _notificationHandlerService.GetNotifications().Should().NotBeNull();
+            _notificationHandlerService.GetNotifications().Should().HaveCount(1);
+            _notificationHandlerService.HasNotifications().Should().BeTrue();
+            resultado.Key.Should().Be("Id");
+            resultado.Value.Should().Be("Id cliente inválido");
         }
 
         [Fact]
@@ -46,9 +64,9 @@ namespace Tests.Unit
                 .ComValue("Sobre nome inválido")
                 .Instanciar();
 
-            _notificationHandlerService.AddDomainNotification(notificationBuilder);
-            _notificationHandlerService.AddDomainNotification(notificationBuilder2);
-            _notificationHandlerService.AddDomainNotification(notificationBuilder3);
+            _notificationHandlerService.AddNotification(notificationBuilder);
+            _notificationHandlerService.AddNotification(notificationBuilder2);
+            _notificationHandlerService.AddNotification(notificationBuilder3);
 
             var resultado = _notificationHandlerService.GetNotifications().ToList();
 
@@ -57,6 +75,7 @@ namespace Tests.Unit
             resultado[0].Should().BeEquivalentTo(notificationBuilder);
             resultado[1].Should().BeEquivalentTo(notificationBuilder2);
             resultado[2].Should().BeEquivalentTo(notificationBuilder3);
+            _notificationHandlerService.HasNotifications().Should().BeTrue();
         }
 
         [Fact]
@@ -66,12 +85,13 @@ namespace Tests.Unit
                 .ComValue("Cliente Inválido")
                 .Instanciar();
 
-            _notificationHandlerService.AddDomainNotification(notificationBuilder);
+            _notificationHandlerService.AddNotification(notificationBuilder);
             _notificationHandlerService.RemoveNotification(notificationBuilder);
 
             _notificationHandlerService.GetNotifications().Should().NotBeNull();
             _notificationHandlerService.GetNotifications().Should().HaveCount(0);
             _notificationHandlerService.GetNotifications().FirstOrDefault().Should().BeNull();
+            _notificationHandlerService.HasNotifications().Should().BeFalse();
         }
 
         [Fact]
@@ -91,9 +111,9 @@ namespace Tests.Unit
                 .ComValue("Sobre nome inválido")
                 .Instanciar();
 
-            _notificationHandlerService.AddDomainNotification(notificationBuilder);
-            _notificationHandlerService.AddDomainNotification(notificationBuilder2);
-            _notificationHandlerService.AddDomainNotification(notificationBuilder3);
+            _notificationHandlerService.AddNotification(notificationBuilder);
+            _notificationHandlerService.AddNotification(notificationBuilder2);
+            _notificationHandlerService.AddNotification(notificationBuilder3);
 
             _notificationHandlerService.RemoveNotification(notificationBuilder2);
 
@@ -103,12 +123,13 @@ namespace Tests.Unit
             resultado.Should().HaveCount(2);
             resultado[0].Should().BeEquivalentTo(notificationBuilder);
             resultado[1].Should().BeEquivalentTo(notificationBuilder3);
+            _notificationHandlerService.HasNotifications().Should().BeTrue();
         }
 
         [Fact]
         public void NaoDeveAdicionarUmaNotificationNula()
         {
-            _notificationHandlerService.AddDomainNotification(null);
+            _notificationHandlerService.AddNotification(null);
 
             var resultado = _notificationHandlerService.GetNotifications().ToList();
 
@@ -120,11 +141,11 @@ namespace Tests.Unit
         [Fact]
         public void NaoDeveAdicionarUmaNotificationExistente()
         {
-            _notificationHandlerService.AddDomainNotification(new NotificationHandlerBuilder()
+            _notificationHandlerService.AddNotification(new NotificationHandlerBuilder()
                 .ComValue("Cliente Inválido")
                 .Instanciar());
 
-            _notificationHandlerService.AddDomainNotification(new NotificationHandlerBuilder()
+            _notificationHandlerService.AddNotification(new NotificationHandlerBuilder()
                 .ComValue("Cliente Inválido")
                 .Instanciar());
 
@@ -133,12 +154,13 @@ namespace Tests.Unit
             resultado.Should().NotBeEmpty();
             resultado.Should().NotBeNull();
             resultado.Should().HaveCount(1);
+            _notificationHandlerService.HasNotifications().Should().BeTrue();
         }
 
         [Fact]
         public void NaoDeveRemoverUmaNotificationNula()
         {
-            _notificationHandlerService.AddDomainNotification(new NotificationHandlerBuilder()
+            _notificationHandlerService.AddNotification(new NotificationHandlerBuilder()
                 .ComValue("Cliente Inválido")
                 .Instanciar());
 
@@ -148,6 +170,7 @@ namespace Tests.Unit
             resultado.Should().NotBeEmpty();
             resultado.Should().NotBeNull();
             resultado.Should().HaveCount(1);
+            _notificationHandlerService.HasNotifications().Should().BeTrue();
         }
 
         [Fact]
@@ -162,8 +185,8 @@ namespace Tests.Unit
                 .ComValue("Nome inválido")
                 .Instanciar();
 
-            _notificationHandlerService.AddDomainNotification(builder1);
-            _notificationHandlerService.AddDomainNotification(builder2);
+            _notificationHandlerService.AddNotification(builder1);
+            _notificationHandlerService.AddNotification(builder2);
 
             _notificationHandlerService.GetNotifications().Should().HaveCount(2);
 
@@ -176,6 +199,7 @@ namespace Tests.Unit
             resultado.Should().NotBeNull();
             resultado.Should().HaveCount(1);
             resultado[0].Should().BeEquivalentTo(builder2);
+            _notificationHandlerService.HasNotifications().Should().BeTrue();
         }
 
         [Fact]
@@ -185,10 +209,11 @@ namespace Tests.Unit
                 .ComValue("Cliente Inválido")
                 .Instanciar();
 
-            _notificationHandlerService.AddDomainNotification(builder1);
+            _notificationHandlerService.AddNotification(builder1);
 
             _notificationHandlerService.HasNotifications().Should().BeTrue();
             _notificationHandlerService.GetNotifications().Should().HaveCount(1);
+            _notificationHandlerService.HasNotifications().Should().BeTrue();
         }
 
         [Fact]
@@ -210,11 +235,12 @@ namespace Tests.Unit
                 .ComValue("Nome inválido")
                 .Instanciar();
 
-            _notificationHandlerService.AddDomainNotification(builder1);
-            _notificationHandlerService.AddDomainNotification(builder2);
+            _notificationHandlerService.AddNotification(builder1);
+            _notificationHandlerService.AddNotification(builder2);
 
             _notificationHandlerService.HasNotifications().Should().BeTrue();
             _notificationHandlerService.GetNotifications().Should().HaveCount(2);
+            _notificationHandlerService.HasNotifications().Should().BeTrue();
         }
 
         [Fact]
@@ -229,13 +255,14 @@ namespace Tests.Unit
                 .ComValue("Nome inválido")
                 .Instanciar();
 
-            _notificationHandlerService.AddDomainNotification(builder1);
-            _notificationHandlerService.AddDomainNotification(builder2);
+            _notificationHandlerService.AddNotification(builder1);
+            _notificationHandlerService.AddNotification(builder2);
 
             _notificationHandlerService.RemoveNotification(builder1);
 
             _notificationHandlerService.HasNotifications().Should().BeTrue();
             _notificationHandlerService.GetNotifications().Should().HaveCount(1);
+            _notificationHandlerService.HasNotifications().Should().BeTrue();
         }
 
         [Fact]
@@ -250,14 +277,15 @@ namespace Tests.Unit
                 .ComValue("Nome inválido")
                 .Instanciar();
 
-            _notificationHandlerService.AddDomainNotification(builder1);
-            _notificationHandlerService.AddDomainNotification(builder2);
+            _notificationHandlerService.AddNotification(builder1);
+            _notificationHandlerService.AddNotification(builder2);
 
             _notificationHandlerService.RemoveNotification(builder1);
             _notificationHandlerService.RemoveNotification(builder2);
 
             _notificationHandlerService.HasNotifications().Should().BeFalse();
             _notificationHandlerService.GetNotifications().Should().HaveCount(0);
+            _notificationHandlerService.HasNotifications().Should().BeFalse();
         }
     }
 }
