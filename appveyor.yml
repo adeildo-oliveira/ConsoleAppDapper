@@ -13,6 +13,5 @@ build_script:
 clone_depth: 1
 test_script:
   - cmd: dotnet restore ./Tests.Unit/Tests.Unit.csproj --verbosity m
-  - cmd: cd ConsoleAppDapper
-  - cmd: dotnet xunit
+  - cmd: dotnet test ./Tests.Unit/Tests.Unit.csproj
 deploy: off
