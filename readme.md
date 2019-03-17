@@ -1,7 +1,5 @@
 [![Build status](https://ci.appveyor.com/api/projects/status/f4qded1o1y3sexog?svg=true)](https://ci.appveyor.com/project/adeildo-oliveira/consoleappdapper)
 
-[![Build status](https://ci.appveyor.com/api/projects/status/f4qded1o1y3sexog/branch/master?svg=true)](https://ci.appveyor.com/project/adeildo-oliveira/consoleappdapper/branch/master)
-
 # Projeto com DOCKER  e Testes Automatizados
 Este projeto é um exemplo utilizando um banco de dados com o padrão domain notification. Para executar, deixei abaixo alguns comandos úteis.
 
